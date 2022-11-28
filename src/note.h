@@ -6,6 +6,7 @@ typedef struct note {
 
 note *parseInput(char *notes);
 void displayNotes(note *notes, int count);
+void displayNoteContext(note note_to_use);
 int getNotesLength(note *notes);
 void displayNoteCap();
 char *assignNoteValue(char buffer[], int limit);
@@ -23,6 +24,15 @@ note *parseInput(char *notes) {
     */
 
     toReturn = malloc(sizeof(note));
+
+    // check if there is any data to be read
+    if (*notes == '\0') {
+        toReturn->note_name = NULL;
+        toReturn->note_data = NULL;
+
+        return toReturn;
+    }
+    
     title = strtok(notes, "\n");
 
     // analyze the file
@@ -30,7 +40,6 @@ note *parseInput(char *notes) {
         contents = strtok(NULL, "\n");
         completed = strtok(NULL, "\n");
         toReturnOffset++;
-
 
         // save the note title and contents
         (toReturn + toReturnOffset - 1)->note_name = title;
@@ -100,6 +109,13 @@ void displayNotes(note *notes, int count) {
     displayNoteCap();
 }
 
+void displayNoteContext(note note_to_use) {
+    printf("\nContext ---\n");
+    printf("%s\n", note_to_use.note_data);
+    printf("\n");
+}
+
+// rework this junk as well
 void displayNoteCap() {
     printf("+");
 
@@ -108,21 +124,16 @@ void displayNoteCap() {
 
     printf("+");
 
-    for (int i = 0; i < 57; i++)
+    for (int i = 0; i < 3; i++)
+        printf("-");
+
+    printf("+");
+
+    for (int i = 0; i < 53; i++)
         printf("-");
 
     printf("+");
     printf("\n");
-}
-
-char getChar() {
-    char toReturn;
-    char junk;
-
-    scanf("%c", &toReturn);
-    scanf("%c", &junk);
-
-    return toReturn;
 }
 
 char *assignNoteValue(char buffer[], int limit) {

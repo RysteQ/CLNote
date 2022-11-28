@@ -9,20 +9,31 @@ typedef enum {false, true} bool;
 #include "file.h"
 
 int main (int argc, char **argv) {
+    char *note_data;
+    char *file_name;
+
     if (argc != 2) {
         printf("No input / output file detected\n");
-        return -1;
+        printf("Creating a blank file\n");
+        printf("Filename -> ");
+
+        // create the new file
+        char to_create[100];
+        getString(to_create, 100);
+        createFile(to_create);
+
+        file_name = to_create;
+    } else {
+        file_name = argv[1];
     }
 
     // read the input file and parse the data
-    char *note_data = readFile(argv[1]);
+    note_data = readFile(file_name);
     note *notes = parseInput(note_data);
     int notes_count = getNotesLength(notes);
-
+    
     // main loop
     while (true) {
-        displayNotes(notes, notes_count);
-
         // get the user input (this will be reworked in the future)
         printf("Command -> ");
         char user_input = getChar();
@@ -99,8 +110,7 @@ int main (int argc, char **argv) {
 
             // save
             case 's':
-                saveFile(argv[1], notes, notes_count);
-
+                saveFile(file_name, notes, notes_count);
                 break;
             
             // help
@@ -111,9 +121,35 @@ int main (int argc, char **argv) {
                 printf("d: delete\n");
                 printf("c: copy\n");
                 printf("s: save\n");
+                printf("l: show notes\n");
+                printf("i: inspect note\n");
                 printf("q: quit\n");
                 printf("h: help\n");
                 printf("\n");
+
+                break;
+
+            // show notes
+            // will probably add some code in the future to inform the user if there are more than 10 notes and display those 10 notes
+            // if the user wants more than 10 notes they will have to do a certain action
+            case 'l':
+                displayNotes(notes, notes_count);
+                break;
+
+            case 'i':
+                int note_to_inspect;
+                
+                // get the note index
+                printf("Note -> ");
+                note_to_inspect = getInt() - 1;
+
+                // check if the note index is valid or note
+                if (note_to_inspect > notes_count) {
+                    printf("Invalid note index\n");
+                    break;
+                }
+
+                displayNoteContext(*(notes + note_to_inspect));
 
                 break;
 

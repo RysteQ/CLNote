@@ -2,6 +2,13 @@ char getChar();
 int getInt();
 void getString(char buffer[], int limit);
 
+char getChar() {
+    char toReturn = getchar();
+    getchar();
+
+    return toReturn;
+}
+
 int getInt() {
     int toReturn;
     char junk;
@@ -12,6 +19,7 @@ int getInt() {
     return toReturn;
 }
 
+// to be reworked so it uses dynamic memory allocation instead of this junk
 void getString(char buffer[], int limit) {
     char junk;
 
