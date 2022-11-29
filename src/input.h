@@ -23,9 +23,8 @@ int getInt() {
 void getString(char buffer[], int limit) {
     char junk;
 
-    for (int i = 0; i < limit; i++) {
+    for (int i = 0; i < limit; i++)
         buffer[i] = '\0';
-    }
 
     scanf("%s", buffer);
     scanf("%c", &junk);

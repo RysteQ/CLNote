@@ -4,12 +4,48 @@ typedef struct note {
     bool completed;
 } note;
 
+bool checkValidity(char *note_data);
 note *parseInput(char *notes);
 void displayNotes(note *notes, int count);
 void displayNoteContext(note note_to_use);
 int getNotesLength(note *notes);
 void displayNoteCap();
 char *assignNoteValue(char buffer[], int limit);
+
+bool checkValidity(char *note_data) {
+    int offset = 0;
+    int length_before_new_line = 0;
+    int new_lines = 0;
+
+    // check if there is any data at all
+    if (*note_data == '\0')
+        return false;
+
+    // check the contents of the file
+    while (*(note_data + offset) != '\0') {
+        if (*(note_data + offset) == '\n') {
+            // check if the title / context and status are intact
+            if (length_before_new_line == 0) {
+                return false;
+            } else if (length_before_new_line != 1 && (new_lines + 1) % 3 == 0) {
+                return false;
+            }
+
+            length_before_new_line = 0;
+            new_lines++;
+        } else {
+            length_before_new_line++;
+        }
+
+        offset++;
+    }
+
+    // if the new lines are not divisible by three (aka there is some data missing) return false
+    if (new_lines % 3 != 0)
+        return false;
+
+    return true;
+}
 
 note *parseInput(char *notes) {
     note *toReturn;
@@ -24,15 +60,6 @@ note *parseInput(char *notes) {
     */
 
     toReturn = malloc(sizeof(note));
-
-    // check if there is any data to be read
-    if (*notes == '\0') {
-        toReturn->note_name = NULL;
-        toReturn->note_data = NULL;
-
-        return toReturn;
-    }
-    
     title = strtok(notes, "\n");
 
     // analyze the file
@@ -65,9 +92,8 @@ note *parseInput(char *notes) {
 int getNotesLength(note *notes) {
     int toReturn = 0;
 
-    while ((notes + toReturn)->note_name != NULL) {
+    while ((notes + toReturn)->note_name != NULL)
         toReturn++;
-    }
 
     return toReturn;
 }
@@ -139,9 +165,8 @@ void displayNoteCap() {
 char *assignNoteValue(char buffer[], int limit) {
     char *toReturn = malloc(sizeof(char) * limit);
     
-    for (int i = 0; i < limit; i++) {
+    for (int i = 0; i < limit; i++)
         *(toReturn + i) = buffer[i];
-    }
 
     return toReturn;
 }

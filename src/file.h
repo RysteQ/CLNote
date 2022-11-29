@@ -19,9 +19,8 @@ char *readFile(char *filename) {
     }
 
     // if size is one (aka there were no data to read) decrement it
-    if (size == 1) {
+    if (size == 1)
         size--;
-    }
 
     // end the string with a null terminator
     *(note_data + size) = '\0';

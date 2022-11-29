@@ -29,6 +29,12 @@ int main (int argc, char **argv) {
 
     // read the input file and parse the data
     note_data = readFile(file_name);
+    
+    if (checkValidity(note_data) == false) {
+        printf("The input file is corrupted\n");
+        return -1;
+    }
+
     note *notes = parseInput(note_data);
     int notes_count = getNotesLength(notes);
     
